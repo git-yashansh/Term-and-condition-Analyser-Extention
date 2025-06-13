@@ -4,8 +4,8 @@
 
 ---
 
-🔗 Download Link: [Download TermiAI](https://github.com/git-yashansh/Term-and-condition-Analyser-Extention/releases/download/v1.0.0/your-zip-name.zip
-)
+🔗 Download Link: [Download!! My TermiAI is waiting for help you!!](https://github.com/git-yashansh/Term-and-condition-Analyser-Extention/releases/download/v1.0.0/EXTENTION.zip
+)  ---   KUMAR YASHANSH
 
 ---
 
