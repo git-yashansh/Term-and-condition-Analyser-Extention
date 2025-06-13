@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI T&C Analysis</title>
+  <style>
+    body { 
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0; 
+      padding: 12px;
+      width: 400px;
+      background: #f8f9fa;
+    }
+    .warning-header {
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #4285f4, #34a853);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 10px rgba(66, 133, 244, 0.3);
+    }
+    .ai-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #4285f4;
+      font-size: 14px;
+    }
+    .header-text h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .header-text p {
+      margin: 2px 0 0 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .recommendation {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .recommendation.accept {
+      border-left: 5px solid #34a853;
+    }
+    .recommendation.reject {
+      border-left: 5px solid #ea4335;
+    }
+    .recommendation.proceed-with-caution {
+      border-left: 5px solid #fbbc04;
+    }
+    .recommendation h4 {
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    .recommendation-icon {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    #analysis-content {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .risk-point {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      border-left: 4px solid #4285f4;
+    }
+    .loading {
+      text-align: center;
+      color: #4285f4;
+      font-style: italic;
+      padding: 20px;
+    }
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #4285f4;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="warning-header">
+    <div class="ai-icon">AI</div>
+    <div class="header-text">
+      <h3>Gemini AI Analysis</h3>
+      <p>Smart recommendations powered by Google AI</p>
+    </div>
+  </div>
+  
+  <div id="recommendation-section"></div>
+  <div id="analysis-content"></div>
+  
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

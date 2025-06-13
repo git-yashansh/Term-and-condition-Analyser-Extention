@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "AI T&C Analyzer with Gemini",
+  "version": "1.0",
+  "description": "AI-powered Terms & Conditions analyzer using Google Gemini API.",
+  "permissions": ["contextMenus", "storage", "notifications"],
+  "host_permissions": ["https://generativelanguage.googleapis.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AI T&C Analyzer"
+  }
+}
