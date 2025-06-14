@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "ai-analyze-tc",
-    title: "🤖 Analyze with AI",
+    title: "🤖 Termi AI ",
     contexts: ["selection"]
   });
 });
