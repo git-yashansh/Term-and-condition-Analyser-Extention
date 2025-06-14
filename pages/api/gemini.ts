@@ -1,20 +1,36 @@
+// pages/api/gemini.ts
+
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Only POST allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Only POST allowed' });
   }
 
-  const { userPrompt } = req.body;
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ message: 'Missing Gemini API key' });
+  }
 
-  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: userPrompt }] }]
-    })
-  });
+  try {
+    const { userPrompt } = req.body;
 
-  const data = await response.json();
-  return res.status(200).json(data);
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: userPrompt }]
+          }
+        ]
+      })
+    });
+
+    const result = await geminiRes.json();
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Gemini API Error:", err);
+    res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
 }
