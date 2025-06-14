@@ -14,22 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
     analysisContent.innerHTML = '<div class="loading">Processing terms and conditions...</div>';
 
     try {
-      // Call Gemini API with better error handling
-      console.log('Calling Gemini API with text:', text.substring(0, 100));
       const analysis = await analyzeWithGemini(text);
       displayResults(analysis, recommendationSection, analysisContent);
     } catch (error) {
       console.error('Gemini Analysis failed:', error);
-      
-      // Show specific error message
+
       recommendationSection.innerHTML = `
         <div class="recommendation proceed-with-caution">
           <h4><span class="recommendation-icon">❌</span>AI Connection Failed</h4>
           <p>Error: ${error.message}. Using basic analysis instead.</p>
         </div>
       `;
-      
-      // Fallback to basic analysis
+
       const basicAnalysis = analyzeBasic(text);
       displayBasicResults(basicAnalysis, recommendationSection, analysisContent);
     }
@@ -37,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function analyzeWithGemini(text) {
-  console.log('Starting Gemini API call...');
-  console.log('API Key exists:', !!CONFIG.GEMINI_API_KEY);
-  console.log('Text length:', text.length);
+  console.log('Calling your secure Vercel Gemini API...');
 
   const prompt = `You are a legal expert analyzing Terms & Conditions. 
 
@@ -63,33 +57,20 @@ RISKS:
 4. [Risk point 4]
 5. [Risk point 5]`;
 
-  const requestBody = {
-    contents: [{
-      parts: [{ text: prompt }]
-    }]
-  };
-
-  console.log('Making API request to:', `${CONFIG.GEMINI_URL}?key=${CONFIG.GEMINI_API_KEY.substring(0, 10)}...`);
-
-  const response = await fetch(`${CONFIG.GEMINI_URL}?key=${CONFIG.GEMINI_API_KEY}`, {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json'
+  const response = await fetch("https://term-and-condition-analyser-extenti.vercel.app/api/gemini", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(requestBody)
+    body: JSON.stringify({ userPrompt: prompt })
   });
-
-  console.log('Response status:', response.status);
-  console.log('Response ok:', response.ok);
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error('API Error Response:', errorText);
-    throw new Error(`Gemini API Error: ${response.status} - ${errorText}`);
+    throw new Error(`Secure API Error: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
-  console.log('API Response:', data);
 
   if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
     throw new Error('Invalid response format from Gemini API');
@@ -99,15 +80,12 @@ RISKS:
 }
 
 function parseGeminiResponse(geminiText) {
-  console.log('Parsing Gemini response:', geminiText);
-  
   const lines = geminiText.split('\n').filter(line => line.trim());
   
   let recommendation = 'PROCEED_WITH_CAUTION';
   let explanation = '';
   let risks = [];
   
-  // Parse recommendation
   const recLine = lines.find(line => line.includes('RECOMMENDATION:'));
   if (recLine) {
     if (recLine.includes('ACCEPT') && !recLine.includes('NOT')) {
@@ -117,13 +95,11 @@ function parseGeminiResponse(geminiText) {
     }
   }
   
-  // Parse reason
   const reasonLine = lines.find(line => line.includes('REASON:'));
   if (reasonLine) {
     explanation = reasonLine.replace('REASON:', '').trim();
   }
-  
-  // Parse risks
+
   lines.forEach(line => {
     if (line.match(/^\d+\./)) {
       const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
@@ -133,7 +109,6 @@ function parseGeminiResponse(geminiText) {
     }
   });
 
-  // If no structured format found, extract from general text
   if (risks.length === 0) {
     const sentences = geminiText.split('.').filter(s => s.trim().length > 20);
     risks = sentences.slice(0, 5).map(s => s.trim());
@@ -147,9 +122,6 @@ function parseGeminiResponse(geminiText) {
 }
 
 function displayResults(analysis, recommendationSection, analysisContent) {
-  console.log('Displaying results:', analysis);
-  
-  // Display recommendation
   const recClass = analysis.recommendation.toLowerCase().replace('_', '-');
   const recIcon = {
     'accept': '✅',
@@ -158,7 +130,7 @@ function displayResults(analysis, recommendationSection, analysisContent) {
   }[recClass] || '⚠️';
 
   const recText = analysis.recommendation.replace('_', ' ');
-  
+
   recommendationSection.innerHTML = `
     <div class="recommendation ${recClass}">
       <h4><span class="recommendation-icon">${recIcon}</span>
@@ -167,7 +139,6 @@ function displayResults(analysis, recommendationSection, analysisContent) {
     </div>
   `;
 
-  // Display risk points
   if (analysis.risks.length > 0) {
     const risksHtml = analysis.risks.map((risk, index) => 
       `<div class="risk-point">
@@ -200,7 +171,6 @@ function displayBasicResults(analysis, recommendationSection, analysisContent) {
 }
 
 function analyzeBasic(text) {
-  // Enhanced basic analysis
   const lowerText = text.toLowerCase();
   const points = [];
 
